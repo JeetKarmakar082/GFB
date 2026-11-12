@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Her Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="bgs"></div>
+<canvas id="fx"></canvas>
+<div id="glow"></div>
+<main id="story"></main>
+
+<div id="bar"></div>
+<div id="brand"></div>
+<div id="count"></div>
+<nav id="dots"></nav>
+<div id="arrows">
+  <button id="prev" aria-label="Previous">←</button>
+  <button id="next" aria-label="Next">→</button>
+</div>
+<div id="curtain">✦</div>
+
+<div id="lb" aria-hidden="true">
+  <button class="lb-x" id="lbClose" aria-label="Close">✕</button>
+  <button class="lb-nav" id="lbPrev" aria-label="Previous photo">←</button>
+  <img id="lbImg" alt="">
+  <button class="lb-nav" id="lbNext" aria-label="Next photo">→</button>
+</div>
+
+<section id="intro">
+  <div class="intro-inner">
+    <p class="eyebrow">A story of someone special</p>
+    <h1 id="introName"></h1>
+    <p class="sub">made with love, for you by someone</p>
+    <button class="btn" id="begin">Begin ✦</button>
+  </div>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>

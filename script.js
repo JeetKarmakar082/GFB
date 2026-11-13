@@ -122,8 +122,9 @@ const scenes = SCENES.map((s,i)=>{
 });
 
 /* ---------- navigation ---------- */
-let cur=-1, busy=true;
+let cur=-1, busy=true, atIntro = true
 function swap(i){
+  if(atIntro) return;
   scenes.forEach((o,k)=>{o.sec.classList.toggle('active',k===i); o.bg.classList.toggle('on',k===i); o.d.classList.toggle('on',k===i);});
   cur=i; setMode(SCENES[i].mode);
   $('#count').textContent=SCENES[i].num;

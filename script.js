@@ -122,7 +122,7 @@ const scenes = SCENES.map((s,i)=>{
 });
 
 /* ---------- navigation ---------- */
-let cur=-1, busy=true, atIntro = true
+let cur=-1, busy=true, atIntro = true;
 function swap(i){
   if(atIntro) return;
   scenes.forEach((o,k)=>{o.sec.classList.toggle('active',k===i); o.bg.classList.toggle('on',k===i); o.d.classList.toggle('on',k===i);});
@@ -206,6 +206,32 @@ bloom.innerHTML = `<svg viewBox="-100 -100 200 200" aria-hidden="true">
   <g class="lay" style="--d:1.2s;--dir:normal">${petals(6, .46, 'pgC', 0)}</g>
   <g class="core"><circle r="10" fill="url(#pgD)"/>${seeds}</g>
 </svg>`;
+
+function restartIntroAnims() {
+  intro.querySelectorAll('*').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+}
+
+$('#begin').onclick = () => {
+  song.currentTime = 0; song.play().catch(() => { });
+  const a = intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 900, fill: 'forwards' });
+  a.finished.then(() => {
+    intro.style.display = 'none'; a.cancel();
+    atIntro = false; swap(0); busy = false;
+  });
+};
+
+function backToStart() {
+  closeLB(); busy = true; atIntro = true;
+  intro.style.display = '';
+  restartIntroAnims();
+  intro.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 1400 }).finished.then(() => {
+    scenes.forEach(o => { o.sec.classList.remove('active'); o.bg.classList.remove('on'); o.d.classList.remove('on'); });
+    cur = -1; $('#bar').style.width = '0';
+  });
+}
+song.addEventListener('ended', backToStart);
+
+muteBtn.onclick = () => { song.muted = !song.muted; muteBtn.classList.toggle('off', song.muted); };
 
 /* ---------- hearts ---------- */
 function hearts(){

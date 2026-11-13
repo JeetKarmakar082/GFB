@@ -163,11 +163,48 @@ addEventListener('touchend',e=>{
   d<0?go(cur+1):go(cur-1);
 },{passive:true});
 
-/* ---------- intro ---------- */
-$('#begin').onclick=()=>{
-  const intro=$('#intro');
-  intro.animate([{opacity:1},{opacity:0}],{duration:900,fill:'forwards'}).finished.then(()=>{intro.remove(); swap(0); busy=false;});
-};
+/* ---------- intro: photo wall + song ---------- */
+const intro = $('#intro'), song = $('#song'), muteBtn = $('#mute');
+
+const wall = document.createElement('div'); wall.id = 'introWall';
+CHAPTERS.flatMap(c => c.photos).sort(() => Math.random() - .5).forEach((src, i) => {
+  const tile = document.createElement('div'); tile.className = 'tile'; tile.style.setProperty('--i', i);
+  const img = new Image(); img.alt = '';
+  img.onerror = () => tile.classList.add('missing');
+  img.src = src; tile.appendChild(img); wall.appendChild(tile);
+});
+intro.prepend(wall);
+
+/* ---------- swirling flower ---------- */
+const bloom = $('#bloom');
+const PETAL = 'M0 0C16-18 17-60 0-80C-17-60-16-18 0 0Z';
+function petals(n, k, fill, off) {
+  let s = '';
+  for (let i = 0; i < n; i++) s += `<path d="${PETAL}" transform="rotate(${(i * 360 / n + off).toFixed(2)}) scale(${k})" fill="url(#${fill})"/>`;
+  return s;
+}
+let dust = '', seeds = '';
+for (let i = 0; i < 20; i++) {
+  const a = i / 20 * Math.PI * 2;
+  dust += `<circle cx="${(Math.cos(a) * 90).toFixed(1)}" cy="${(Math.sin(a) * 90).toFixed(1)}" r="${i % 2 ? 1.1 : 1.9}" fill="#f2e3c9"/>`;
+}
+for (let i = 0; i < 8; i++) {
+  const a = i / 8 * Math.PI * 2;
+  seeds += `<circle cx="${(Math.cos(a) * 5.5).toFixed(1)}" cy="${(Math.sin(a) * 5.5).toFixed(1)}" r="1.1" fill="#6b1226"/>`;
+}
+bloom.innerHTML = `<svg viewBox="-100 -100 200 200" aria-hidden="true">
+  <defs>
+    <linearGradient id="pgA" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#4a0a1c"/><stop offset="1" stop-color="#c04b62"/></linearGradient>
+    <linearGradient id="pgB" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#b3263f"/><stop offset="1" stop-color="#f2e3c9"/></linearGradient>
+    <linearGradient id="pgC" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#d9ad55"/><stop offset="1" stop-color="#fff3d1"/></linearGradient>
+    <radialGradient id="pgD"><stop offset="0" stop-color="#fff3d1"/><stop offset="1" stop-color="#d9ad55"/></radialGradient>
+  </defs>
+  <g class="lay" style="--d:1s;--dir:reverse">${dust}</g>
+  <g class="lay" style="--d:.4s;--dir:normal">${petals(12, 1, 'pgA', 0)}</g>
+  <g class="lay" style="--d:.8s;--dir:reverse">${petals(8, .74, 'pgB', 22.5)}</g>
+  <g class="lay" style="--d:1.2s;--dir:normal">${petals(6, .46, 'pgC', 0)}</g>
+  <g class="core"><circle r="10" fill="url(#pgD)"/>${seeds}</g>
+</svg>`;
 
 /* ---------- hearts ---------- */
 function hearts(){
